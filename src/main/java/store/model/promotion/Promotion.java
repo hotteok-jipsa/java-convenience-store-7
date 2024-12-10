@@ -27,4 +27,9 @@ public class Promotion {
                 name, buy, get, startDate, endDate
         );
     }
+
+    public boolean isPeriod(LocalDate target) {
+        return (target.isAfter(startDate) || target.isEqual(startDate)) &&
+                ((target.isBefore(endDate) || target.isEqual(endDate)));
+    }
 }

@@ -1,5 +1,6 @@
 package store.model.product;
 
+import java.time.LocalDate;
 import store.dto.ProductDto;
 import store.model.promotion.Promotion;
 
@@ -21,5 +22,9 @@ public class Product {
         return new ProductDto(
                 name, price, quantity, promotion.getPromotionDto()
         );
+    }
+
+    public boolean isPromotionPeriod(LocalDate thisTime) {
+        return promotion.isPeriod(thisTime);
     }
 }
