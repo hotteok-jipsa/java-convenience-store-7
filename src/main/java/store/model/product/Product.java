@@ -1,5 +1,6 @@
 package store.model.product;
 
+import store.dto.ProductDto;
 import store.model.promotion.Promotion;
 
 public class Product {
@@ -14,5 +15,11 @@ public class Product {
         this.price = price;
         this.quantity = quantity;
         this.promotion = promotion;
+    }
+
+    public ProductDto getProductDto() {
+        return new ProductDto(
+                name, price, quantity, promotion.getPromotionDto()
+        );
     }
 }

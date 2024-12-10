@@ -1,6 +1,7 @@
 package store.model.promotion;
 
 import java.time.LocalDate;
+import store.dto.PromotionDto;
 
 public class Promotion {
     private final String name;
@@ -19,5 +20,11 @@ public class Promotion {
 
     public String getName() {
         return name;
+    }
+
+    public PromotionDto getPromotionDto() {
+        return new PromotionDto(
+                name, buy, get, startDate, endDate
+        );
     }
 }
