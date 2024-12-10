@@ -20,6 +20,10 @@ public class OutputView {
         }
     }
 
+    public void printErrorMessage(Exception e) {
+        System.out.println(e);
+    }
+
     private void printProductMessage(ProductDto productDto) {
         if (productDto.quantity() == 0) {
             System.out.printf(EMPTY_PRODUCT_MESSAGE_FORM,
@@ -29,4 +33,5 @@ public class OutputView {
         System.out.printf(PRODUCT_MESSAGE_FORM,
                 productDto.name(), productDto.price(), productDto.quantity(), productDto.promotionDto().name());
     }
+
 }

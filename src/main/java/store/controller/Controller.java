@@ -41,8 +41,7 @@ public class Controller {
     }
 
     private PurchasedProducts getPurchasedProducts() {
-        String input = inputView.getInput();
-        Map<Product, Integer> rawPurchasedProducts = inputValidator.validatePurchasedProducts(input, products);
+        Map<Product, Integer> rawPurchasedProducts = inputAndValidatePurchasedProducts();
         PurchasedProducts purchasedProducts = new PurchasedProducts();
         for (Entry<Product, Integer> rawPurchasedProduct : rawPurchasedProducts.entrySet()) {
             PurchasedProduct purchasedProduct = new PurchasedProduct(rawPurchasedProduct.getKey(),
@@ -50,5 +49,15 @@ public class Controller {
             purchasedProducts.addPurchasedProduct(purchasedProduct);
         }
         return purchasedProducts;
+    }
+
+    private Map<Product, Integer> inputAndValidatePurchasedProducts() {
+        try {
+            String input = inputView.getInput();
+            return inputValidator.validatePurchasedProducts(input, products);
+        } catch (IllegalArgumentException e) {
+            outputView.printErrorMessage(e);
+            return inputAndValidatePurchasedProducts();
+        }
     }
 }
