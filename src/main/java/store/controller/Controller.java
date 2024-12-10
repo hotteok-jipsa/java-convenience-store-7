@@ -1,8 +1,11 @@
 package store.controller;
 
 import java.util.Map;
+import java.util.Map.Entry;
+import store.model.product.Product;
 import store.model.product.Products;
 import store.model.promotion.Promotions;
+import store.model.purchasedproduct.PurchasedProduct;
 import store.model.purchasedproduct.PurchasedProducts;
 import store.validator.InputValidator;
 import store.view.InputView;
@@ -28,6 +31,7 @@ public class Controller {
 
     public void start() {
         printStartMessageAndGetInput();
+        PurchasedProducts purchasedProducts = getPurchasedProducts();
     }
 
     private void printStartMessageAndGetInput() {
@@ -39,6 +43,12 @@ public class Controller {
     private PurchasedProducts getPurchasedProducts() {
         String input = inputView.getInput();
         Map<String, Integer> rawPurchasedProducts = inputValidator.validatePurchasedProductsForm(input);
-
+        PurchasedProducts purchasedProducts = new PurchasedProducts();
+        for (Entry<String, Integer> rawPurchasedProduct : rawPurchasedProducts.entrySet()) {
+            Product product = products.findByNameIfAbsentThrow(rawPurchasedProduct.getKey());
+            PurchasedProduct purchasedProduct = new PurchasedProduct(product, rawPurchasedProduct.getValue());
+            purchasedProducts.addPurchasedProduct(purchasedProduct);
+        }
+        return purchasedProducts;
     }
 }
