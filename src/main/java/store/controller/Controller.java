@@ -32,6 +32,7 @@ public class Controller {
     public void start() {
         printStartMessageAndGetInput();
         PurchasedProducts purchasedProducts = getPurchasedProducts();
+        purchasedProducts.payAll();
     }
 
     private void printStartMessageAndGetInput() {

@@ -11,4 +11,8 @@ public class PurchasedProduct {
         this.product = product;
         this.quantity = quantity;
     }
+
+    public void pay() {
+
+    }
 }

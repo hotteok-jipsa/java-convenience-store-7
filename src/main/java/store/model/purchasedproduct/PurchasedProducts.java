@@ -9,4 +9,10 @@ public class PurchasedProducts {
     public void addPurchasedProduct(final PurchasedProduct purchasedProduct) {
         purchasedProducts.add(purchasedProduct);
     }
+
+    public void payAll() {
+        for (PurchasedProduct purchasedProduct : purchasedProducts) {
+            purchasedProduct.pay();
+        }
+    }
 }
