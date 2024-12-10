@@ -26,5 +26,6 @@ public class Controller {
     private void printStartMessageAndGetInput() {
         outputView.printWelcomeMessage();
         outputView.printProductsMessage(products.getProductDtos());
+        inputView.printPurchaseGuideMessage();
     }
 }
