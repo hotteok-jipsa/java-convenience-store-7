@@ -1,26 +1,30 @@
 package store.validator;
 
+import static store.ExceptionMessage.PRODUCT_OUT_OF_STOCK_EXCEPTION;
 import static store.ExceptionMessage.PURCHASED_PRODUCTS_FORM_INVALID_EXCEPTION;
 
 import java.util.HashMap;
 import java.util.Map;
+import store.model.product.Product;
+import store.model.product.Products;
 
 public class InputValidator {
 
-    public Map<String, Integer> validatePurchasedProductsForm(String input) {
-        Map<String, Integer> purchasedProductsMap = new HashMap<>();
+    public Map<Product, Integer> validatePurchasedProducts(String input, Products products) {
+        Map<Product, Integer> purchasedProductsMap = new HashMap<>();
         String[] purchasedProducts = input.split(",");
         for (String purchasedProduct : purchasedProducts) {
-            validatePurchasedProductForm(purchasedProduct);
+            validatePurchasedProduct(purchasedProduct);
             validateDuplicatePurchasedProduct(purchasedProductsMap, getPurchasedProductName(purchasedProduct));
-            purchasedProductsMap.put(
-                    getPurchasedProductName(purchasedProduct), getPurchasedProductQuantity(purchasedProduct)
-            );
+            Product product = validateProductExist(products, purchasedProduct);
+            int quantity = validateQuantity(products, purchasedProduct);
+
+            purchasedProductsMap.put(product, quantity);
         }
         return purchasedProductsMap;
     }
 
-    private void validatePurchasedProductForm(String rawPurchasedProduct) {
+    private void validatePurchasedProduct(String rawPurchasedProduct) {
         if (!rawPurchasedProduct.startsWith("[") || !rawPurchasedProduct.endsWith("]")) {
             throw new IllegalArgumentException(PURCHASED_PRODUCTS_FORM_INVALID_EXCEPTION.message);
         }
@@ -34,6 +38,29 @@ public class InputValidator {
         }
     }
 
+
+    private void validateDuplicatePurchasedProduct(Map<Product, Integer> map, String productName) {
+        for (Product product : map.keySet()) {
+            if (product.getProductDto().name().equals(productName)) {
+                throw new IllegalArgumentException(PURCHASED_PRODUCTS_FORM_INVALID_EXCEPTION.message);
+            }
+        }
+    }
+
+    private Product validateProductExist(Products products, String rawPurchasedProduct) {
+        return products.findByNameIfAbsentThrow(getPurchasedProductName(rawPurchasedProduct));
+    }
+
+    private int validateQuantity(Products products, String rawPurchasedProduct) {
+        String name = getPurchasedProductName(rawPurchasedProduct);
+        int purchasedQuantity = getPurchasedProductQuantity(rawPurchasedProduct);
+        if (products.getTotalQuantityByName(name) < purchasedQuantity) {
+            throw new IllegalArgumentException(PRODUCT_OUT_OF_STOCK_EXCEPTION.message);
+        }
+        return purchasedQuantity;
+    }
+
+
     private String getPurchasedProductName(String validatedPurchasedProduct) {
         validatedPurchasedProduct = validatedPurchasedProduct.substring(1, validatedPurchasedProduct.length());
         return validatedPurchasedProduct.split("-")[0];
@@ -43,11 +70,5 @@ public class InputValidator {
         validatedPurchasedProduct = validatedPurchasedProduct.substring(1, validatedPurchasedProduct.length());
         String rawQuantity = validatedPurchasedProduct.split("-")[1];
         return Integer.parseInt(rawQuantity);
-    }
-
-    private void validateDuplicatePurchasedProduct(Map<String, Integer> map, String productName) {
-        if (map.containsKey(productName)) {
-            throw new IllegalArgumentException(PURCHASED_PRODUCTS_FORM_INVALID_EXCEPTION.message);
-        }
     }
 }

@@ -42,11 +42,11 @@ public class Controller {
 
     private PurchasedProducts getPurchasedProducts() {
         String input = inputView.getInput();
-        Map<String, Integer> rawPurchasedProducts = inputValidator.validatePurchasedProductsForm(input);
+        Map<Product, Integer> rawPurchasedProducts = inputValidator.validatePurchasedProducts(input, products);
         PurchasedProducts purchasedProducts = new PurchasedProducts();
-        for (Entry<String, Integer> rawPurchasedProduct : rawPurchasedProducts.entrySet()) {
-            Product product = products.findByNameIfAbsentThrow(rawPurchasedProduct.getKey());
-            PurchasedProduct purchasedProduct = new PurchasedProduct(product, rawPurchasedProduct.getValue());
+        for (Entry<Product, Integer> rawPurchasedProduct : rawPurchasedProducts.entrySet()) {
+            PurchasedProduct purchasedProduct = new PurchasedProduct(rawPurchasedProduct.getKey(),
+                    rawPurchasedProduct.getValue());
             purchasedProducts.addPurchasedProduct(purchasedProduct);
         }
         return purchasedProducts;

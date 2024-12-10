@@ -23,6 +23,13 @@ public class Products {
         throw new IllegalArgumentException(PRODUCT_NOT_EXIST_EXCEPTION.message);
     }
 
+    public int getTotalQuantityByName(String name) {
+        return products.stream()
+                .filter(product -> product.getProductDto().name().equals(name))
+                .mapToInt(product -> product.getProductDto().quantity())
+                .sum();
+    }
+
     public List<ProductDto> getProductDtos() {
         return products.stream()
                 .map(product -> product.getProductDto())
