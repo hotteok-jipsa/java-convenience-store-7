@@ -12,9 +12,9 @@ public class InputValidator {
         String[] purchasedProducts = input.split(",");
         for (String purchasedProduct : purchasedProducts) {
             validatePurchasedProductForm(purchasedProduct);
+            validateDuplicatePurchasedProduct(purchasedProductsMap, getPurchasedProductName(purchasedProduct));
             purchasedProductsMap.put(
-                    getPurchasedProductName(purchasedProduct),
-                    getPurchasedProductQuantity(purchasedProduct)
+                    getPurchasedProductName(purchasedProduct), getPurchasedProductQuantity(purchasedProduct)
             );
         }
         return purchasedProductsMap;
@@ -43,5 +43,11 @@ public class InputValidator {
         validatedPurchasedProduct = validatedPurchasedProduct.substring(1, validatedPurchasedProduct.length());
         String rawQuantity = validatedPurchasedProduct.split("-")[1];
         return Integer.parseInt(rawQuantity);
+    }
+
+    private void validateDuplicatePurchasedProduct(Map<String, Integer> map, String productName) {
+        if (map.containsKey(productName)) {
+            throw new IllegalArgumentException(PURCHASED_PRODUCTS_FORM_INVALID_EXCEPTION.message);
+        }
     }
 }
