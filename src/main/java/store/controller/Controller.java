@@ -2,6 +2,7 @@ package store.controller;
 
 import store.model.product.Products;
 import store.model.promotion.Promotions;
+import store.model.purchasedproduct.PurchasedProducts;
 import store.view.InputView;
 import store.view.OutputView;
 
@@ -27,5 +28,10 @@ public class Controller {
         outputView.printWelcomeMessage();
         outputView.printProductsMessage(products.getProductDtos());
         inputView.printPurchaseGuideMessage();
+    }
+
+    private PurchasedProducts getPurchasedProducts() {
+        inputView.getInput();
+        return null;
     }
 }
